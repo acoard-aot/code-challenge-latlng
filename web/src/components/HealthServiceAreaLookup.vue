@@ -9,76 +9,66 @@
         </p>
       </v-col>
     </v-row>
-      <v-form 
-        @submit="submitRequest" 
-        ref="form"
-        v-model="isValid"
-        lazy-validation
-      >
-        <v-container>
-          <v-row>
-            <v-col cols="12" md="12">
-              <v-text-field 
-                label="Latitude"
-                v-model="latitude" 
-                required
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field 
-                label="Longitude"
-                v-model="longitude" 
-                required
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-btn type="submit">Lookup</v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
+    <v-form
+      @submit="submitRequest"
+      ref="form"
+      v-model="isValid"
+      lazy-validation
+    >
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-text-field
+              label="Latitude"
+              :rules="[(v) => !!value || 'Required.']"
+              v-model="latitude"
+              required
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-text-field label="Longitude" v-model="longitude" required />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-btn type="submit">
+              <v-progress-circular v-if="isLoading" indeterminate />
+              <span v-else>Lookup</span>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row v-if="!!areaName">
+          <v-col> Community Health Service Area of {{ areaName }} </v-col>
+        </v-row>
+      </v-container>
+    </v-form>
   </v-container>
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import { Inject } from "inversify-props";
-import { Types } from "@/inversify.container.ts";
+import { Types } from "@/inversify.config.ts";
 import IHealthServiceArea from "@/services/IHealthServiceArea";
 
 export default class HealthServiceAreaLookup extends Vue {
-  @Inject(Types.HealthServiceArea)
-  private lookupService!: IHealthServiceArea
+  @Inject(Types.HealthServiceAreaLookup)
+  private lookupService!: IHealthServiceArea;
 
   isValid = false;
+  isLoading = false;
   latitude = "+48.8277";
   longitude = "-123.711";
+  areaName? = "";
 
-  private submitRequest = () => {
-    const areaName = this.lookupService.getAreaName()
-    alert(areaName);
+  private async submitRequest() {
+    this.isLoading = true;
+    this.areaName = undefined;
+    const areaName = await this.lookupService.getAreaName();
+    this.areaName = areaName;
+    this.isLoading = false;
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
