@@ -1,13 +1,13 @@
 # build stage
-FROM node:lts-alpine as build-stage
+FROM node:14.17.6 as build-stage
 
 WORKDIR /src
 COPY /web/package*.json ./
-RUN npm install
+COPY /web/yarn.lock ./
+RUN yarn
 COPY /web/. .
 
-RUN npm run build
-# CMD [ "npm", "run", "serve" ]
+RUN yarn build
 
 # production stage
 FROM nginx:stable-alpine as production-stage

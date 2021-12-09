@@ -12,7 +12,6 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: .web/
 
 jobs:
   docker-build-check:
@@ -24,7 +23,7 @@ jobs:
       - name: docker build to check strictness
         id: docker-build
         run: |
-          docker build .
+          docker build -t cc-web . -f web/Dockerfile 
 
   node-run-tests:
     runs-on: ubuntu-latest
@@ -32,7 +31,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install modules
-        run: npm ci 
-      - name: Run tests
-        run: npm run tests
+      - name: Install modules (yarn)
+        run: yarn
+        working-directory: web/
+      # - name: Run tests
+      #   run: npm run tests
