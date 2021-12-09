@@ -37,3 +37,4 @@ jobs:
         working-directory: web/
       - name: Run tests
         run: yarn jest
+        working-directory: web/
