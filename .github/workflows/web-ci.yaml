@@ -1,0 +1,38 @@
+name: Web CI
+
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+    paths:
+      - "web/**"
+
+defaults:
+  run:
+    shell: bash
+    working-directory: .web/
+
+jobs:
+  docker-build-check:
+    runs-on: ubuntu-20.04
+    name: Build dockerfile to ensure it works
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: docker build to check strictness
+        id: docker-build
+        run: |
+          docker build .
+
+  node-run-tests:
+    runs-on: ubuntu-latest
+    name: Build web natively and run unit tests
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci 
+      - name: Run tests
+        run: npm run tests
