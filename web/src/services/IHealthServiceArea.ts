@@ -1,3 +1,3 @@
 export default interface IHealthServiceArea {
-  getAreaName(): Promise<string>
+  getAreaName(): Promise<string>;
 }

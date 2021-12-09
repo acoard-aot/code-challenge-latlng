@@ -5,10 +5,9 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
-import buildDependencyContainer from "./inversify.container"
-
+import bindDependencyInjection from "./inversify.config";
 loadFonts();
 
 createApp(App).use(router).use(store).use(vuetify).mount("#app");
 
-buildDependencyContainer()
+bindDependencyInjection();
