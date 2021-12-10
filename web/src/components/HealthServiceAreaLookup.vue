@@ -51,7 +51,8 @@
 import { Vue } from "vue-class-component";
 import { Inject } from "inversify-props";
 import { Types } from "@/inversify.config.ts";
-import IHealthServiceArea from "@/services/IHealthServiceArea";
+import IHealthServiceArea from "@/services/interfaces/IHealthServiceArea";
+import { RequestStatus } from "@/models/RequestStatus";
 
 export default class HealthServiceAreaLookup extends Vue {
   @Inject(Types.HealthServiceAreaLookup)
@@ -66,8 +67,14 @@ export default class HealthServiceAreaLookup extends Vue {
   private async submitRequest() {
     this.isLoading = true;
     this.areaName = undefined;
-    const areaName = await this.lookupService.getAreaName();
-    this.areaName = areaName;
+
+    const response = await this.lookupService.getAreaName({
+      latitude: this.latitude,
+      longitude: this.longitude,
+    });
+    if (response.status == RequestStatus.Success) {
+      this.areaName = response.data;
+    }
     this.isLoading = false;
   }
 }
