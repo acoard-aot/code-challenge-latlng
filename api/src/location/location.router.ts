@@ -3,7 +3,13 @@
  */
 
 import express, { Request, Response } from "express";
-import * as locationService from "./location.service";
+import * as LocationService from "./location.service";
+import axios, { AxiosResponse } from "axios";
+
+type GeoServerResponse = {
+    features: { properties: { "CMNTY_HLTH_SERV_AREA_NAME": string } }[];
+
+};
 
 /**
  * Router Definition
@@ -24,7 +30,7 @@ locationRouter.get("/point/:lat/:long", async(req: Request, res: Response) => {
         const lat = parseFloat(req.params.lat);
         const long = parseFloat(req.params.long);
 
-        CMNTY_HLTH_SERV_AREA_NAME = await locationService.getLocationfromCordinates(lat, long);
+        CMNTY_HLTH_SERV_AREA_NAME = await LocationService.getLocationfromCordinates(lat, long);
         console.log(" CMNTY_HLTH_SERV_AREA_NAME :" + CMNTY_HLTH_SERV_AREA_NAME)
         
         if (CMNTY_HLTH_SERV_AREA_NAME) {

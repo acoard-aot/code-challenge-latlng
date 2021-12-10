@@ -23,7 +23,7 @@ export async function getLocationfromCordinates(latitude: number, longitude: num
             throw new Error(err.message);
             
         });
-
+    //I'd be in console.log("location fetched:  " + location);
     return location;
 }
 
