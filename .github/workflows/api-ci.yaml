@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install modules
-        run: npm install
+        run: npm ci
         working-directory: api/
       - name: Run tests
         run: npm run test
