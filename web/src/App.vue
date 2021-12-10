@@ -1,21 +1,26 @@
 <template>
   <v-app>
+    <v-app-bar app color="primary" dark> </v-app-bar>
+
     <v-main>
-      <router-view />
+      <HealthServiceAreaLookup />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import Vue from "vue";
+import HealthServiceAreaLookup from "./components/HealthServiceAreaLookup.vue";
 
-export default defineComponent({
+export default Vue.extend({
   name: "App",
 
-  data() {
-    return {
-      //
-    };
+  components: {
+    HealthServiceAreaLookup,
   },
+
+  data: () => ({
+    //
+  }),
 });
 </script>

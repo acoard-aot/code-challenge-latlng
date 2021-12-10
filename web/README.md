@@ -1,4 +1,4 @@
-# latlng
+# web
 
 ## Project setup
 ```

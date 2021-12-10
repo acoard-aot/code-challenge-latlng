@@ -8,6 +8,7 @@ on:
       - dev
     paths:
       - "web/**"
+      - ".github/workflows/web-ci.yaml"
 
 defaults:
   run:
@@ -34,5 +35,9 @@ jobs:
       - name: Install modules (yarn)
         run: yarn
         working-directory: web/
-      # - name: Run tests
-      #   run: npm run tests
+      - name: Run tests
+        run: yarn jest
+        working-directory: web/
+      - name: Run linting
+        run: yarn lint
+        working-directory: web/

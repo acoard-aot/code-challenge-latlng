@@ -1,13 +1,15 @@
 import "reflect-metadata";
-import { createApp } from "vue";
+import Vue from "vue";
 import App from "./App.vue";
-import router from "./router";
-import store from "./store";
 import vuetify from "./plugins/vuetify";
-import { loadFonts } from "./plugins/webfontloader";
+import "@babel/polyfill";
 import bindDependencyInjection from "./inversify.config";
-loadFonts();
 
-createApp(App).use(router).use(store).use(vuetify).mount("#app");
+Vue.config.productionTip = false;
+
+new Vue({
+  vuetify,
+  render: (h) => h(App),
+}).$mount("#app");
 
 bindDependencyInjection();
