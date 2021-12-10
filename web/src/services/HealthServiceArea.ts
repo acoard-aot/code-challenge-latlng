@@ -4,15 +4,16 @@ import IHealthServiceArea from "@/services/interfaces/IHealthServiceArea";
 import LookupRequest from "@/models/LookupRequest";
 import LookupResponse from "@/models/LookupResponse";
 import { RequestStatus } from "@/models/RequestStatus";
+import CommunityHealthServiceAreaName from "@/models/CommunityHealthServiceAreaName";
 
 @injectable()
 export default class HealthServiceArea implements IHealthServiceArea {
-  private readonly API_URL: string = "http://localhost:3000/bpoint";
+  private readonly API_URL: string = "http://localhost:5000/api/location/point";
 
   public async getAreaName(request: LookupRequest): Promise<LookupResponse> {
     const result = new LookupResponse();
     try {
-      const httpResponse = await axios.get<string>(
+      const httpResponse = await axios.get<CommunityHealthServiceAreaName>(
         `${this.API_URL}/${request.latitude}/${request.longitude}`
       );
       if (httpResponse.status == 200) {

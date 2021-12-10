@@ -13,14 +13,13 @@
       @submit="submitRequest"
       ref="form"
       v-model="isValid"
-      lazy-validation
     >
       <v-container>
         <v-row>
           <v-col>
             <v-text-field
               label="Latitude"
-              :rules="[(v) => !!value || 'Required.']"
+              :rules="[(v) => !!v || 'Required.']"
               v-model="latitude"
               required
             />
@@ -39,9 +38,22 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row v-if="!!areaName">
-          <v-col> Community Health Service Area of {{ areaName }} </v-col>
-        </v-row>
+        <div v-if="!!errorMessage" class="text-center">
+          <v-row>
+            <v-col><span>{{ errorMessage }}</span></v-col>
+          </v-row>
+        </div>
+        <div v-else-if="!!areaName" class="text-center">
+          <v-row>
+            <v-col>Corresponding Community Health Service Area: </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <strong v-if="areaName == ' '"> {{ "Not Found" }} </strong>
+              <strong v-else> {{ areaName }} </strong>
+            </v-col>
+          </v-row>
+        </div>
       </v-container>
     </v-form>
   </v-container>
@@ -58,22 +70,26 @@ export default class HealthServiceAreaLookup extends Vue {
   @Inject(Types.HealthServiceAreaLookup)
   private lookupService!: IHealthServiceArea;
 
-  isValid = false;
+  invalid = false;
   isLoading = false;
   latitude = "+48.8277";
   longitude = "-123.711";
   areaName? = "";
+  errorMessage? = "";
 
   private async submitRequest() {
     this.isLoading = true;
     this.areaName = undefined;
+    this.errorMessage = undefined;
 
     const response = await this.lookupService.getAreaName({
       latitude: this.latitude,
       longitude: this.longitude,
     });
     if (response.status == RequestStatus.Success) {
-      this.areaName = response.data;
+      this.areaName = response.getAreaName();
+    } else {
+      this.errorMessage = response.message;
     }
     this.isLoading = false;
   }
