@@ -1,6 +1,6 @@
 import { container } from "inversify-props";
-import IHealthServiceArea from "@/services/IHealthServiceArea";
-import HealthServiceArea from "@/services/implementation/HealthServiceArea";
+import IHealthServiceArea from "@/services/interfaces/IHealthServiceArea";
+import HealthServiceArea from "@/services/HealthServiceArea";
 
 export const Types = {
   HealthServiceAreaLookup: Symbol.for("HealthServiceAreaLookup"),
