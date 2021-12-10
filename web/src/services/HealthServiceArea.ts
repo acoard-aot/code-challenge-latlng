@@ -8,7 +8,7 @@ import CommunityHealthServiceAreaName from "@/models/CommunityHealthServiceAreaN
 
 @injectable()
 export default class HealthServiceArea implements IHealthServiceArea {
-  private readonly API_URL: string = "http://localhost:5000/api/location/point";
+  private readonly API_URL: string = `${process.env.VUE_APP_API_BASE_URL}/api/location/point`;
 
   public async getAreaName(request: LookupRequest): Promise<LookupResponse> {
     const result = new LookupResponse();

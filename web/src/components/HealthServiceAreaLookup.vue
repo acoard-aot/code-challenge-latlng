@@ -9,11 +9,7 @@
         </p>
       </v-col>
     </v-row>
-    <v-form
-      @submit.prevent="submitRequest"
-      ref="form"
-      v-model="isValid"
-    >
+    <v-form @submit.prevent="submitRequest" ref="form" v-model="isValid">
       <v-container>
         <v-row>
           <v-col>
@@ -21,7 +17,10 @@
               label="Latitude"
               :rules="[
                 (v) => !!v || 'Required.',
-                (v) => /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/.test(v) || 'Invalid Latitude'
+                (v) =>
+                  /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/.test(
+                    v
+                  ) || 'Invalid Latitude',
               ]"
               v-model="latitude"
               required
@@ -30,14 +29,18 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field 
-              label="Longitude" 
+            <v-text-field
+              label="Longitude"
               :rules="[
                 (v) => !!v || 'Required.',
-                (v) => /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/.test(v) || 'Invalid Longitude'
+                (v) =>
+                  /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/.test(
+                    v
+                  ) || 'Invalid Longitude',
               ]"
-              v-model="longitude" 
-              required />
+              v-model="longitude"
+              required
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -50,7 +53,9 @@
         </v-row>
         <div v-if="!!errorMessage" class="text-center">
           <v-row>
-            <v-col><v-alert type="error">{{ errorMessage }}</v-alert></v-col>
+            <v-col
+              ><v-alert type="error">{{ errorMessage }}</v-alert></v-col
+            >
           </v-row>
         </div>
         <div v-else-if="!!areaName" class="text-center">
@@ -59,8 +64,12 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-alert v-if="areaName == ' '" type="warning">Community Health Service Area <br/>Not Found</v-alert>
-              <v-alert v-else type="success">Community Health Service Area: <br/>{{ areaName }}</v-alert>
+              <v-alert v-if="areaName == ' '" type="warning"
+                >Community Health Service Area <br />Not Found</v-alert
+              >
+              <v-alert v-else type="success"
+                >Community Health Service Area: <br />{{ areaName }}</v-alert
+              >
             </v-col>
           </v-row>
         </div>
@@ -75,7 +84,7 @@ import { Inject } from "inversify-props";
 import { Types } from "@/inversify.config.ts";
 import IHealthServiceArea from "@/services/interfaces/IHealthServiceArea";
 import { RequestStatus } from "@/models/RequestStatus";
-import { Component } from 'vue-property-decorator';
+import { Component } from "vue-property-decorator";
 
 @Component
 export default class HealthServiceAreaLookup extends Vue {
