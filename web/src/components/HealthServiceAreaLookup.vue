@@ -10,7 +10,7 @@
       </v-col>
     </v-row>
     <v-form
-      @submit="submitRequest"
+      @submit.prevent="submitRequest"
       ref="form"
       v-model="isValid"
     >
@@ -19,7 +19,10 @@
           <v-col>
             <v-text-field
               label="Latitude"
-              :rules="[(v) => !!v || 'Required.']"
+              :rules="[
+                (v) => !!v || 'Required.',
+                (v) => /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/.test(v) || 'Invalid Latitude'
+              ]"
               v-model="latitude"
               required
             />
@@ -27,12 +30,19 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="Longitude" v-model="longitude" required />
+            <v-text-field 
+              label="Longitude" 
+              :rules="[
+                (v) => !!v || 'Required.',
+                (v) => /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/.test(v) || 'Invalid Longitude'
+              ]"
+              v-model="longitude" 
+              required />
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-btn type="submit">
+            <v-btn type="submit" :disabled="!isValid">
               <v-progress-circular v-if="isLoading" indeterminate />
               <span v-else>Lookup</span>
             </v-btn>
@@ -40,17 +50,17 @@
         </v-row>
         <div v-if="!!errorMessage" class="text-center">
           <v-row>
-            <v-col><span>{{ errorMessage }}</span></v-col>
+            <v-col><v-alert type="error">{{ errorMessage }}</v-alert></v-col>
           </v-row>
         </div>
         <div v-else-if="!!areaName" class="text-center">
           <v-row>
-            <v-col>Corresponding Community Health Service Area: </v-col>
+            <v-col></v-col>
           </v-row>
           <v-row>
             <v-col>
-              <strong v-if="areaName == ' '"> {{ "Not Found" }} </strong>
-              <strong v-else> {{ areaName }} </strong>
+              <v-alert v-if="areaName == ' '" type="warning">Community Health Service Area <br/>Not Found</v-alert>
+              <v-alert v-else type="success">Community Health Service Area: <br/>{{ areaName }}</v-alert>
             </v-col>
           </v-row>
         </div>
@@ -60,17 +70,19 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import Vue from "vue";
 import { Inject } from "inversify-props";
 import { Types } from "@/inversify.config.ts";
 import IHealthServiceArea from "@/services/interfaces/IHealthServiceArea";
 import { RequestStatus } from "@/models/RequestStatus";
+import { Component } from 'vue-property-decorator';
 
+@Component
 export default class HealthServiceAreaLookup extends Vue {
   @Inject(Types.HealthServiceAreaLookup)
   private lookupService!: IHealthServiceArea;
 
-  invalid = false;
+  isValid = false;
   isLoading = false;
   latitude = "+48.8277";
   longitude = "-123.711";
