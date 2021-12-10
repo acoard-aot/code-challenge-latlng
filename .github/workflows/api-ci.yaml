@@ -35,6 +35,3 @@ jobs:
       - name: Install modules
         run: npm ci
         working-directory: api/
-      - name: Run tests
-        run: npm run test
-        working-directory: api/
