@@ -38,3 +38,6 @@ jobs:
       - name: Run tests
         run: yarn jest
         working-directory: web/
+      - name: Run linting
+        run: yarn lint
+        working-directory: web/
