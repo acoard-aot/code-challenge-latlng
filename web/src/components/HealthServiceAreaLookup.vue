@@ -14,6 +14,7 @@
         <v-row>
           <v-col>
             <v-text-field
+              data-testid="latitude"
               label="Latitude"
               :rules="[
                 (v) => !!v || 'Required.',
@@ -30,6 +31,7 @@
         <v-row>
           <v-col>
             <v-text-field
+              data-testid="longitude"
               label="Longitude"
               :rules="[
                 (v) => !!v || 'Required.',
@@ -51,23 +53,20 @@
             </v-btn>
           </v-col>
         </v-row>
-        <div v-if="!!errorMessage" class="text-center">
+        <div v-show="!!errorMessage" class="text-center">
           <v-row>
             <v-col
-              ><v-alert type="error">{{ errorMessage }}</v-alert></v-col
+              ><v-alert data-testid="errorMessage" type="error">{{ errorMessage }}</v-alert></v-col
             >
           </v-row>
         </div>
-        <div v-else-if="!!areaName" class="text-center">
-          <v-row>
-            <v-col></v-col>
-          </v-row>
+        <div v-show="!errorMessage && !!areaName" class="text-center">
           <v-row>
             <v-col>
-              <v-alert v-if="areaName == ' '" type="warning"
+              <v-alert v-show="areaName == ' '" type="warning"
                 >Community Health Service Area <br />Not Found</v-alert
               >
-              <v-alert v-else type="success"
+              <v-alert v-show="areaName != ' '" data-testid="successMessage" type="success"
                 >Community Health Service Area: <br />{{ areaName }}</v-alert
               >
             </v-col>
