@@ -16,4 +16,5 @@ RUN set -x \
 ENV PORT 5000
 EXPOSE 5000
 
-CMD [ "npm", "run", "build" ]
+# CMD [ "npm", "run", "build" ]
+CMD [ "npm", "run", "dev" ]

@@ -1,14 +1,15 @@
 version: '3'
 services:
   api:
-    build: api
+    build:
+      context: ./
+      dockerfile: api/Dockerfile
     ports:
       - "5000:5000"
     container_name: api
     # env_file:
     #   - .env
   web:
-    # build: web
     build:
       context: ./
       dockerfile: web/Dockerfile
